@@ -25,9 +25,15 @@ file(GLOB_RECURSE PROJECT_SOURCES
         "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
 )
 
+# 排除构建目录
+list(FILTER PROJECT_SOURCES EXCLUDE REGEX "${CMAKE_BINARY_DIR}.*")
+
 file(GLOB_RECURSE PROJECT_HEADERS
         "${CMAKE_CURRENT_SOURCE_DIR}/*.h"
 )
+
+# 排除构建目录
+list(FILTER PROJECT_HEADERS EXCLUDE REGEX "${CMAKE_BINARY_DIR}.*")
 
 # ------ 三方库目录 ------
 link_directories(

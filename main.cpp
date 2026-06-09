@@ -1,6 +1,7 @@
-#include <iostream>
+#define SDL_MAIN_HANDLED
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
+#include "game_manager.h"
+
+int main(int argc, char** argv) {
+    return GameManager::instance()->run(argc, argv);
 }
