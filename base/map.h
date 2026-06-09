@@ -16,15 +16,15 @@ public:
     [[nodiscard]] size_t get_height() const;
 
     /**
-     * 加载地图文件数据
-     * @param path 地图文件路径
+     * @brief 加载地图文件数据
+     * @param path .csv格式的地图文件路径
      * @return true -> 加载成功 | false -> 加载失败
      */
     [[nodiscard]] bool load(const std::string& path);
 
 private:
-    TileMap tile_map;   // 瓦片地图
-    SDL_Point idx_home = {};    // 玩家防守点索引缓存
+    TileMap tile_map;           // 瓦片地图
+    SDL_Point idx_home = {};    // 房屋索引缓存
 
 private:
     // 去除字符串收尾空格

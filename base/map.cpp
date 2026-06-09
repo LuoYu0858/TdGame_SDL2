@@ -19,7 +19,7 @@ bool Map::load(const std::string& path) {
     // ------ 成功打开 ------
 
     TileMap temp_tile_map;
-    // 当前读取的索引
+    // 当前读取列索引及行索引
     int idx_x, idx_y = -1;
     std::string str_line;
     // 读取一行CSV
@@ -74,6 +74,7 @@ void Map::load_tile_from_string(Tile& tile, const std::string& string) {
         value_list.emplace_back(value);
     }
 
+    // 越界及有效性检查，无效数据赋默认值
     tile.terrain = value_list.size() < 1 || value_list[0] < 0 ? 0 : value_list[0];
     tile.decoration = value_list.size() < 2 ? -1 : value_list[1];
     tile.direction = static_cast<Tile::Direction>(value_list.size() < 3 || value_list[2] < 0 ? 0 : value_list[2]);
