@@ -10,7 +10,7 @@
 
 class Map {
 public:
-    typedef std::unordered_map<int, Route> SpawnerRoutePool;    // 怪物路径生成池 键 -> 刷怪点编号 | 值 -> 对应路径
+    using SpawnerRoutePool = std::unordered_map<int, Route>;    // 怪物路径生成池 键 -> 刷怪点编号 | 值 -> 对应路径
 
 public:
     Map() = default;
@@ -19,6 +19,18 @@ public:
     [[nodiscard]] size_t get_width() const;
 
     [[nodiscard]] size_t get_height() const;
+
+    [[nodiscard]] const TileMap& get_tile_map() const;
+
+    [[nodiscard]] const SDL_Point& get_idx_home() const;
+
+    [[nodiscard]] const SpawnerRoutePool& get_idx_spawner_pool() const;
+
+    /**
+     * @brief 放置防御塔
+     * @param idx_tile 网格suoyin
+     */
+    void place_tower(const SDL_Point& idx_tile);
 
     /**
      * @brief 加载地图文件数据

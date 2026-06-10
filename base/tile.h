@@ -23,4 +23,4 @@ struct Tile {
     bool has_tower = false;                 // 当前瓦片是否放置防御塔
 };
 
-typedef std::vector<std::vector<Tile>> TileMap; // 瓦片地图 (动态二维Tile数组)
+using TileMap = std::vector<std::vector<Tile>>; // 瓦片地图 (动态二维Tile数组)

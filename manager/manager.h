@@ -10,7 +10,6 @@ public:
         return &instance;
     }
 
-
     // 禁用拷贝构造函数
     Manager(const Manager&) = delete;
     // 禁用赋值操作

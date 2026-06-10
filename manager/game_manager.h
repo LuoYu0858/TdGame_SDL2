@@ -7,7 +7,7 @@
 
 // 游戏主体管理器
 class GameManager : public Manager<GameManager> {
-    friend class Manager<GameManager>;
+    friend class Manager;
 
 public:
     int run(int argc, char** argv);

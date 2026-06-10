@@ -51,6 +51,8 @@ target_sources(TdGame PRIVATE ${CJSON_ROOT}/cJSON.c)
 
 target_include_directories(TdGame PRIVATE
         ${PROJECT_SOURCE_DIR}
+        ${PROJECT_SOURCE_DIR}/base
+        ${PROJECT_SOURCE_DIR}/enemy
         ${PROJECT_SOURCE_DIR}/manager
         # ------ 三方库头文件 ------
         ${SDL2_ROOT}/include

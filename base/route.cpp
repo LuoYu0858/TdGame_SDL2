@@ -1,6 +1,8 @@
 // Created by LuoYu on 2026/6/10.
 #include "route.h"
 
+#include <algorithm>
+
 Route::Route(const TileMap& map, const SDL_Point& idx_origin) {
     // 扫描的下一个网格索引
     SDL_Point idx_next = idx_origin;
@@ -49,9 +51,7 @@ const Route::IdxList& Route::get_idx_list() const {
 }
 
 bool Route::check_duplicate_idx(const SDL_Point& idx_target) {
-    for (const auto& [x, y] : idx_list) {
-        // 目标索引和已扫描索引相同，存在环路
-        if (x == idx_target.x && y == idx_target.y) return true;
-    }
-    return false;
+    return std::ranges::any_of(idx_list, [&](const auto& point) {
+        return point.x == idx_target.x && point.y == idx_target.y;
+    });
 }

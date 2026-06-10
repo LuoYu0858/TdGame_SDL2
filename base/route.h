@@ -9,7 +9,7 @@
 // 路径
 class Route {
 public:
-    typedef std::vector<SDL_Point> IdxList; // 路径上的每个网格在地图上的索引
+    using IdxList = std::vector<SDL_Point>; // 路径上的每个网格在地图上的索引
 
 public:
     Route() = default;
@@ -22,7 +22,7 @@ public:
 
     ~Route() = default;
 
-    const IdxList& get_idx_list() const;
+    [[nodiscard]] const IdxList& get_idx_list() const;
 
 
 private:

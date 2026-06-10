@@ -12,6 +12,22 @@ size_t Map::get_height() const {
     return tile_map.size();
 }
 
+const TileMap& Map::get_tile_map() const {
+    return tile_map;
+}
+
+const SDL_Point& Map::get_idx_home() const {
+    return idx_home;
+}
+
+const Map::SpawnerRoutePool& Map::get_idx_spawner_pool() const {
+    return spawner_route_pool;
+}
+
+void Map::place_tower(const SDL_Point& idx_tile) {
+    tile_map[idx_tile.y][idx_tile.x].has_tower = true;
+}
+
 bool Map::load(const std::string& path) {
     std::fstream file(path);
     if (!file.good()) return false;
@@ -75,7 +91,7 @@ void Map::load_tile_from_string(Tile& tile, const std::string& string) {
     }
 
     // 越界及有效性检查，无效数据赋默认值
-    tile.terrain = value_list.size() < 1 || value_list[0] < 0 ? 0 : value_list[0];
+    tile.terrain = value_list.empty() || value_list[0] < 0 ? 0 : value_list[0];
     tile.decoration = value_list.size() < 2 ? -1 : value_list[1];
     tile.direction = static_cast<Tile::Direction>(value_list.size() < 3 || value_list[2] < 0 ? 0 : value_list[2]);
     tile.special_flag = value_list.size() <= 3 ? -1 : value_list[3];
