@@ -90,6 +90,8 @@ void Map::generate_map_cache() {
             if (tile.special_flag < 0) continue;
             // 赋值房子的坐标
             if (tile.special_flag == 0) idx_home.x = x, idx_home.y = y;
+            // 添加路径
+            else spawner_route_pool[tile.special_flag] = Route(tile_map, {x, y});
         }
     }
 }

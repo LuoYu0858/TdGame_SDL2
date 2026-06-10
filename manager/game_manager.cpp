@@ -20,7 +20,7 @@ int GameManager::run(const int argc, char** argv) {
 
         last_counter = current_counter;
 
-        if (delta * 1000 < 1000.0 / FPS) SDL_Delay(static_cast<Uint32>(1000.0 / 60 - delta * 1000));
+        if (delta * 1000 < 1000.0 / FPS) SDL_Delay(static_cast<Uint32>(1000.0 / FPS - delta * 1000));
 
         // 游戏帧更新
         on_update(delta);
@@ -44,13 +44,13 @@ GameManager::GameManager() {
     init_assert(!TTF_Init(), "SDL_ttf初始化失败");
 
     // 设置音频声道
-    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+    Mix_OpenAudio(AUDIO_FREQ, MIX_DEFAULT_FORMAT, AUDIO_TRACT, AUDIO_BUFF_SIZE);
     // 开启输入法候选词窗口
     SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
 
     // 创建游戏窗口
     window = SDL_CreateWindow("村庄保卫战", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                              1280, 720, SDL_WINDOW_SHOWN
+                              WIDTH, HEIGHT, SDL_WINDOW_SHOWN
     );
     init_assert(window, "游戏窗口创建失败");
 

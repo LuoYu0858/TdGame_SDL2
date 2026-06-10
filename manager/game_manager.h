@@ -17,7 +17,12 @@ protected:
     ~GameManager();
 
 private:
-    const int FPS = 60;     // 游戏帧率
+    const int FPS = 60;                 // 游戏帧率
+    const int WIDTH = 1280;             // 窗口宽度
+    const int HEIGHT = 720;             // 窗口高度
+    const int AUDIO_FREQ = 44100;       // 音频采样率
+    const int AUDIO_TRACT = 2;          // 音频声道数
+    const int AUDIO_BUFF_SIZE = 2048;   // SDL音频缓冲区大小
 
 private:
     SDL_Event event{};      // SDL事件

@@ -2,11 +2,16 @@
 #pragma once
 
 #include "tile.h"
+#include "route.h"
 
 #include <SDL.h>
 #include <string>
+#include <unordered_map>
 
 class Map {
+public:
+    typedef std::unordered_map<int, Route> SpawnerRoutePool;    // 怪物路径生成池 键 -> 刷怪点编号 | 值 -> 对应路径
+
 public:
     Map() = default;
     ~Map() = default;
@@ -23,8 +28,9 @@ public:
     [[nodiscard]] bool load(const std::string& path);
 
 private:
-    TileMap tile_map;           // 瓦片地图
-    SDL_Point idx_home = {};    // 房屋索引缓存
+    TileMap tile_map;                       // 瓦片地图
+    SDL_Point idx_home = {};                // 房屋索引缓存
+    SpawnerRoutePool spawner_route_pool;    // 怪物路径生成池
 
 private:
     // 去除字符串收尾空格
