@@ -7,10 +7,6 @@
 
 #include <SDL.h>
 #include <string>
-#include <cJSON.h>
-#include <fstream>
-#include <sstream>
-#include <iostream>
 
 // 游戏配置管理器
 class ConfigManager : public Manager<ConfigManager> {
@@ -58,13 +54,13 @@ public:
      * @brief 从关卡配置文件加载关卡
      * @param path 关卡配置文件路径
      */
-    void load_level_config(const std::string& path);
+    bool load_level_config(const std::string& path);
 
     /**
      * @brief 从游戏配置文件加载配置数据
      * @param path 游戏配置文件路径
      */
-    void load_game_config(const std::string& path);
+    bool load_game_config(const std::string& path);
 
 public:
     const double num_initial_hp = 10;       // 玩家房子初始生命值
