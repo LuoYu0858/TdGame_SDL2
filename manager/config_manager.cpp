@@ -2,7 +2,6 @@
 
 #include "config_manager.h"
 
-#include <cJSON.h>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -98,4 +97,154 @@ bool ConfigManager::load_level_config(const std::string& path) {
 }
 
 bool ConfigManager::load_game_config(const std::string& path) {
+    // 打开文件 读取 并关闭
+    std::ifstream file(path);
+    if (!file.good()) return false;
+
+    std::stringstream str_stream;
+    str_stream << file.rdbuf();
+
+    file.close();
+
+    cJSON* json_root = cJSON_Parse(str_stream.str().c_str());
+    if (!json_root || json_root->type != cJSON_Object) return false;
+
+    // 获取basic字段 -> 游戏基础设置
+    const cJSON* json_basic = cJSON_GetObjectItem(json_root, "basic");
+
+    // 获取player字段 -> 玩家设置
+    const cJSON* json_player = cJSON_GetObjectItem(json_root, "player");
+
+    // 获取tower字段 -> 防御塔配置
+    const cJSON* json_tower = cJSON_GetObjectItem(json_root, "tower");
+
+    // 获取enemy字段 -> 怪物设置
+    const cJSON* json_enemy = cJSON_GetObjectItem(json_root, "enemy");
+
+    if (!json_basic || !json_player || !json_tower || !json_enemy
+        || json_basic->type != cJSON_Object
+        || json_player->type != cJSON_Object
+        || json_tower->type != cJSON_Object
+        || json_enemy->type != cJSON_Object) {
+        cJSON_Delete(json_root);
+        return false;
+    }
+
+    // 解析具体字段
+    _parse_basic_template(basic_template, json_basic);
+
+    _parse_player_template(player_template, json_player);
+
+    _parse_tower_template(archer_template, cJSON_GetObjectItem(json_tower, "archer"));
+    _parse_tower_template(axeman_template, cJSON_GetObjectItem(json_tower, "axeman"));
+    _parse_tower_template(gunner_template, cJSON_GetObjectItem(json_tower, "gunner"));
+
+    _parse_enemy_template(slim_template, cJSON_GetObjectItem(json_enemy, "slim"));
+    _parse_enemy_template(king_slim_template, cJSON_GetObjectItem(json_enemy, "king_slim"));
+    _parse_enemy_template(skeleton_template, cJSON_GetObjectItem(json_enemy, "skeleton"));
+    _parse_enemy_template(goblin_template, cJSON_GetObjectItem(json_enemy, "goblin"));
+    _parse_enemy_template(goblin_priest_template, cJSON_GetObjectItem(json_enemy, "goblin_priest"));
+
+    cJSON_Delete(json_root);
+    return true;
+}
+
+void ConfigManager::_parse_basic_template(BasicTemplate& tpl, const cJSON* json_root) {
+    if (!json_root || json_root->type != cJSON_Object) return;
+
+    if (const cJSON* json_window_title = cJSON_GetObjectItem(json_root, "window_title");
+        json_window_title && json_window_title->type == cJSON_String)
+        tpl.widow_title = json_window_title->valuestring;
+
+    if (const cJSON* json_window_width = cJSON_GetObjectItem(json_root, "window_width");
+        json_window_width && json_window_width->type == cJSON_Number)
+        tpl.window_width = json_window_width->valueint;
+
+    if (const cJSON* json_window_height = cJSON_GetObjectItem(json_root, "window_height");
+        json_window_height && json_window_height->type == cJSON_Number)
+        tpl.window_height = json_window_height->valueint;
+}
+
+void ConfigManager::_parse_player_template(PlayerTemplate& tpl, const cJSON* json_root) {
+    if (!json_root || json_root->type != cJSON_Object) return;
+
+    if (const cJSON* json_speed = cJSON_GetObjectItem(json_root, "speed");
+        json_speed && json_speed->type == cJSON_Number)
+        tpl.speed = json_speed->valuedouble;
+
+    if (const cJSON* json_normal_attack_interval = cJSON_GetObjectItem(json_root, "normal_attack_interval");
+        json_normal_attack_interval && json_normal_attack_interval->type == cJSON_Number)
+        tpl.normal_attack_interval = json_normal_attack_interval->valuedouble;
+
+    if (const cJSON* json_normal_attack_damage = cJSON_GetObjectItem(json_root, "normal_attack_damage");
+        json_normal_attack_damage && json_normal_attack_damage->type == cJSON_Number)
+        tpl.normal_attack_damage = json_normal_attack_damage->valuedouble;
+
+    if (const cJSON* json_skill_interval = cJSON_GetObjectItem(json_root, "skill_interval");
+        json_skill_interval && json_skill_interval->type == cJSON_Number)
+        tpl.skill_interval = json_skill_interval->valuedouble;
+
+    if (const cJSON* json_skill_damage = cJSON_GetObjectItem(json_root, "skill_damage");
+        json_skill_damage && json_skill_damage->type == cJSON_Number)
+        tpl.skill_damage = json_skill_damage->valuedouble;
+}
+
+void ConfigManager::_parse_tower_template(TowerTemplate& tpl, const cJSON* json_root) {
+    if (!json_root || json_root->type != cJSON_Object) return;
+
+    const cJSON* json_interval = cJSON_GetObjectItem(json_root, "interval");
+    const cJSON* json_damage = cJSON_GetObjectItem(json_root, "damage");
+    const cJSON* json_view_range = cJSON_GetObjectItem(json_root, "view_range");
+    const cJSON* json_cost = cJSON_GetObjectItem(json_root, "cost");
+    const cJSON* json_upgrade_cost = cJSON_GetObjectItem(json_root, "upgrade_cost");
+
+    _parse_number_array(tpl.interval, 10, json_interval);
+    _parse_number_array(tpl.damage, 10, json_damage);
+    _parse_number_array(tpl.view_range, 10, json_view_range);
+    _parse_number_array(tpl.cost, 10, json_cost);
+    _parse_number_array(tpl.upgrade_cost, 9, json_upgrade_cost);
+}
+
+void ConfigManager::_parse_enemy_template(EnemyTemplate& tpl, const cJSON* json_root) {
+    if (!json_root || json_root->type != cJSON_Object) return;
+
+    if (const cJSON* json_hp = cJSON_GetObjectItem(json_root, "hp");
+        json_hp && json_hp->type == cJSON_Number)
+        tpl.hp = json_hp->valuedouble;
+
+    if (const cJSON* json_speed = cJSON_GetObjectItem(json_root, "speed");
+        json_speed && json_speed->type == cJSON_Number)
+        tpl.speed = json_speed->valuedouble;
+
+    if (const cJSON* json_damage = cJSON_GetObjectItem(json_root, "damage");
+        json_damage && json_damage->type == cJSON_Number)
+        tpl.damage = json_damage->valuedouble;
+
+    if (const cJSON* json_reward_ratio = cJSON_GetObjectItem(json_root, "reward_ratio");
+        json_reward_ratio && json_reward_ratio->type == cJSON_Number)
+        tpl.reward_ratio = json_reward_ratio->valuedouble;
+
+    if (const cJSON* json_recover_interval = cJSON_GetObjectItem(json_root, "recover_interval");
+        json_recover_interval && json_recover_interval->type == cJSON_Number)
+        tpl.recover_interval = json_recover_interval->valuedouble;
+
+    if (const cJSON* json_recover_range = cJSON_GetObjectItem(json_root, "recover_range");
+        json_recover_range && json_recover_range->type == cJSON_Number)
+        tpl.recover_ranger = json_recover_range->valuedouble;
+
+    if (const cJSON* json_recover_intensity = cJSON_GetObjectItem(json_root, "recover_intensity");
+        json_recover_intensity && json_recover_intensity->type == cJSON_Number)
+        tpl.recover_intensity = json_recover_intensity->valuedouble;
+}
+
+void ConfigManager::_parse_number_array(double* arr, const int max_len, const cJSON* json_root) {
+    if (!json_root || json_root->type != cJSON_Array) return;
+
+    int idx = -1;
+    cJSON* json_elem = nullptr;
+    cJSON_ArrayForEach(json_elem, json_root) {
+        ++idx;
+        if (json_elem->type != cJSON_Number || idx >= max_len) continue;
+        arr[idx] = json_elem->valuedouble;
+    }
 }

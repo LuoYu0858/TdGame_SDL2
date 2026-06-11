@@ -7,6 +7,7 @@
 
 #include <SDL.h>
 #include <string>
+#include <cJSON.h>
 
 // 游戏配置管理器
 class ConfigManager : public Manager<ConfigManager> {
@@ -97,4 +98,20 @@ public:
 protected:
     ConfigManager() = default;
     ~ConfigManager() = default;
+
+private:
+    // 解析basic具体字段
+    static void _parse_basic_template(BasicTemplate& tpl, const cJSON* json_root);
+
+    // 解析player具体字段
+    static void _parse_player_template(PlayerTemplate& tpl, const cJSON* json_root);
+
+    // 解析tower具体字段
+    static void _parse_tower_template(TowerTemplate& tpl, const cJSON* json_root);
+
+    // 解析enemy具体字段
+    static void _parse_enemy_template(EnemyTemplate& tpl, const cJSON* json_root);
+
+    // 解析由数字构成的数组
+    static void _parse_number_array(double* arr, int max_len, const cJSON* json_root);
 };
