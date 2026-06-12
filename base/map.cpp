@@ -63,6 +63,10 @@ bool Map::load(const std::string& path) {
 
     if (temp_tile_map.empty() || temp_tile_map[0].empty()) return false;
     tile_map = temp_tile_map;
+
+    // 生成地图缓存
+    generate_map_cache();
+
     return true;
 }
 

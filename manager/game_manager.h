@@ -18,8 +18,6 @@ protected:
 
 private:
     const int FPS = 60;                 // 游戏帧率
-    const int WIDTH = 1280;             // 窗口宽度
-    const int HEIGHT = 720;             // 窗口高度
     const int AUDIO_FREQ = 44100;       // 音频采样率
     const int AUDIO_TRACT = 2;          // 音频声道数
     const int AUDIO_BUFF_SIZE = 2048;   // SDL音频缓冲区大小
@@ -31,9 +29,11 @@ private:
     SDL_Window* window = nullptr;       // SDL窗口
     SDL_Renderer* renderer = nullptr;   // SDL渲染器
 
+    SDL_Texture* tex_tile_map = nullptr;    // 瓦片地图纹理
+
 private:
     // 自定义断言
-    static void init_assert(bool flag, const char* err_msg);
+    static void _init_assert(bool flag, const char* err_msg);
 
     // 输入处理
     void on_input();
@@ -43,4 +43,7 @@ private:
 
     // 渲染
     void on_render();
+
+    // 预生成瓦片地图纹理
+    bool _generate_tile_map_texture();
 };
