@@ -170,13 +170,13 @@ double Enemy::get_recover_intensity() const {
     return this->recover_intensity;
 }
 
-bool Enemy::can_move() const {
+bool Enemy::can_remove() const {
     return !is_valid;
 }
 
 double Enemy::get_route_process() const {
     if (route->get_idx_list().size() == 1) return 1;
-    return static_cast<double>(idx_target) / (route->get_idx_list().size() - 1);
+    return static_cast<double>(idx_target) / static_cast<double>(route->get_idx_list().size() - 1);
 }
 
 void Enemy::_refresh_position_target() {
@@ -188,8 +188,8 @@ void Enemy::_refresh_position_target() {
         // 转化为窗口坐标
         static const SDL_Rect& rect_tile_map = ConfigManager::instance()->rect_tile_map;
         position_target = {
-            static_cast<double>(rect_tile_map.x + x * SIZE_TILE + SIZE_TILE / 2),   // 取地图左边缘，水平增加地图网格点水平坐标，乘以瓦片尺寸，再取中心点
-            static_cast<double>(rect_tile_map.y + y * SIZE_TILE + SIZE_TILE / 2)    // 取地图上边缘，垂直增加地图网格点垂直坐标，乘以瓦片尺寸，再取中心点
+            rect_tile_map.x + x * SIZE_TILE + SIZE_TILE / 2.0,   // 取地图左边缘，水平增加地图网格点水平坐标，乘以瓦片尺寸，再取中心点
+            rect_tile_map.y + y * SIZE_TILE + SIZE_TILE / 2.0    // 取地图上边缘，垂直增加地图网格点垂直坐标，乘以瓦片尺寸，再取中心点
         };
     }
 }

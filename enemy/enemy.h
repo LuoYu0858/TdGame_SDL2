@@ -40,26 +40,26 @@ public:
 
     void make_invalid();
 
-    double get_hp() const;
+    [[nodiscard]] double get_hp() const;
 
-    const Vector2& get_size() const;
+    [[nodiscard]] const Vector2& get_size() const;
 
-    const Vector2& get_position() const;
+    [[nodiscard]] const Vector2& get_position() const;
 
-    const Vector2& get_velocity() const;
+    [[nodiscard]] const Vector2& get_velocity() const;
 
-    double get_damage() const;
+    [[nodiscard]] double get_damage() const;
 
-    double get_reward_ratio() const;
+    [[nodiscard]] double get_reward_ratio() const;
 
-    double get_recover_radius() const;
+    [[nodiscard]] double get_recover_radius() const;
 
-    double get_recover_intensity() const;
+    [[nodiscard]] double get_recover_intensity() const;
 
-    bool can_move() const;
+    [[nodiscard]] bool can_remove() const;
 
     // 敌人在路径行进进度
-    double get_route_process() const;
+    [[nodiscard]] double get_route_process() const;
 
 protected:
     Vector2 size;           // 敌人尺寸

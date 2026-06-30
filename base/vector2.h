@@ -69,7 +69,7 @@ public:
         return std::sqrt(x * x + y * y);
     }
 
-    Vector2 normalize() const {
+    [[nodiscard]] Vector2 normalize() const {
         const auto l = length();
         return l == 0 ? Vector2{0, 0} : Vector2{x / l, y / l};
     }
