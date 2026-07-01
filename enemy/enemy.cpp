@@ -34,7 +34,7 @@ void Enemy::on_update(const double delta) {
     // 计算这一帧最远可以移动的距离
     const Vector2 move_distance = velocity * delta;
     // 前一帧距离目标位置距离
-    const Vector2 target_distance = position_target - position_target;
+    const Vector2 target_distance = position_target - position;
 
     // 需要移动的距离 -> 不能超过最远可移动距离
     position += move_distance < target_distance ? move_distance : target_distance;
@@ -53,12 +53,12 @@ void Enemy::on_update(const double delta) {
     // ------ 选择对应动画 ------
 
     // 是否显示水平方向动画
-    if (const bool is_show_X_anim = abs(velocity.x) >= abs(velocity.y);
+    if (const bool is_show_x_anim = abs(velocity.x) >= abs(velocity.y);
         is_show_sketch) {
-        if (is_show_X_anim) anim_current = velocity.x > 0 ? &anim_right_sketch : &anim_left_sketch;
+        if (is_show_x_anim) anim_current = velocity.x > 0 ? &anim_right_sketch : &anim_left_sketch;
         else anim_current = velocity.y > 0 ? &anim_down_sketch : &anim_up_sketch;
         } else {
-            if (is_show_X_anim) anim_current = velocity.x > 0 ? &anim_right : &anim_left;
+            if (is_show_x_anim) anim_current = velocity.x > 0 ? &anim_right : &anim_left;
             else anim_current = velocity.y > 0 ? &anim_down : &anim_up;
         }
 
@@ -69,10 +69,7 @@ void Enemy::on_update(const double delta) {
 
 void Enemy::on_render(SDL_Renderer* renderer) const {
     static SDL_Rect rect;
-    static SDL_Point point{
-        static_cast<int>(position.x - size.x / 2),
-        static_cast<int>(position.y - size.y / 2)
-    };
+    static SDL_Point point;
     // 血条尺寸
     static const Vector2 size_hp_bar = {40, 8};
     // 血条纵向偏移值
@@ -80,6 +77,9 @@ void Enemy::on_render(SDL_Renderer* renderer) const {
 
     static constexpr SDL_Color color_border = {116, 185, 124, 255};
     static constexpr SDL_Color color_content = {226, 255, 194, 255};
+
+    point.x = static_cast<int>(position.x - size.x / 2);
+    point.y = static_cast<int>(position.y - size.y / 2);
 
     anim_current->on_render(renderer, point);
 
@@ -135,7 +135,7 @@ void Enemy::set_route(const Route* route) {
 }
 
 void Enemy::make_invalid() {
-    is_valid = true;
+    is_valid = false;
 }
 
 double Enemy::get_hp() const {

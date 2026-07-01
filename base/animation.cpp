@@ -24,7 +24,7 @@ void Animation::set_frame_data(SDL_Texture* texture, const int num_h, const int 
     this->texture = texture;
     SDL_QueryTexture(texture, nullptr, nullptr, &width_tex, &height_tex);
 
-    width_frame = width_tex / num_h, height_frame = height_tex * num_v;
+    width_frame = width_tex / num_h, height_frame = height_tex / num_v;
 
     rect_src_list.resize(idx_list.size());
 

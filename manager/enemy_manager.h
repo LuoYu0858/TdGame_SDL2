@@ -20,6 +20,15 @@ public:
 
     void on_render(SDL_Renderer* renderer) const;
 
+    /**
+     * 敌人生成
+     * @param type 生成敌人的类型
+     * @param idx_spawn_point 出生点索引
+     */
+    void spawn_enemy(EnemyType type, int idx_spawn_point);
+
+    [[nodiscard]] bool check_cleared() const;
+
 protected:
     EnemyManager() = default;
     ~EnemyManager();
